@@ -1,26 +1,24 @@
 package com.helix.test_androidannotation_eventbus;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
-import android.support.annotation.WorkerThread;
-import android.widget.Button;
-import android.widget.EditText;
+import android.util.Log;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.SupposeUiThread;
-import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.DrawableRes;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 @EActivity(R.layout.activity_main)
 public class MyActivity extends Activity {
+
 
 
     @ViewById(R.id.progess_1)
@@ -41,47 +39,72 @@ public class MyActivity extends Activity {
     private Handler progressBarHandler = new Handler();
     private long fileSize = 0;
 
-    @Background
-    void doInBackGruond() {
-        publishProgress(50);
+//    @Background
+//    void doInBackGruond() {
+//        publishProgress(50);
+//
+//
+//    }
 
-
-    }
-
-    @UiThread
-    void publishProgress(int progress) {
-        progressBar1.setMax(100);
-        progressBar1.setProgress(progress);
-
-      /*This is the main UI thread here I do cool stuff with the JSON objects*/
-    }
+//    @UiThread
+//    void publishProgress(int progress) {
+//        progressBar1.setMax(100);
+//        progressBar1.setProgress(progress);
+//
+//      /*This is the main UI thread here I do cool stuff with the JSON objects*/
+//    }
 
 
     @Click
     void btn_start() {
         count = 0;
         Toast.makeText(this, "Click Button Start", Toast.LENGTH_SHORT).show();
-
-        doInBackGruond();
+        Intent intent = new Intent(MyActivity.this, ServiceDowload.class);
+        startService(intent);
+        EventBus.getDefault().post(new ServiceEvent());
+//        doInBackGruond();
 
     }
 
-    private int doSomeTasks() {
-        while (fileSize <= 1000000) {
-
-            fileSize++;
-
-            if (fileSize == 100000) {
-                return 10;
-            } else if (fileSize == 200000) {
-                return 20;
-            } else if (fileSize == 300000) {
-                return 30;
-            }
-            // ...add your own
-
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessage1Main(Message message) {
+        Log.i("Signal", message.percent + " : " + message.follow);
+        switch (message.follow) {
+            case 1:
+                progressBar1.setProgress(message.percent);
+                break;
+            case 2:
+                progressBar2.setProgress(message.percent);
+                break;
+            case 3:
+                progressBar3.setProgress(message.percent);
+                break;
+            case 4:
+                progressBar4.setProgress(message.percent);
+                break;
+            case 5:
+                Toast.makeText(getApplicationContext(), "Finish", Toast.LENGTH_SHORT).show();
+                break;
         }
 
-        return 100;
     }
+
+//    private int doSomeTasks() {
+//        while (fileSize <= 1000000) {
+//
+//            fileSize++;
+//
+//            if (fileSize == 100000) {
+//                return 10;
+//            } else if (fileSize == 200000) {
+//                return 20;
+//            } else if (fileSize == 300000) {
+//                return 30;
+//            }
+//            // ...add your own
+//
+//        }
+//
+//        return 100;
+//    }
 }
