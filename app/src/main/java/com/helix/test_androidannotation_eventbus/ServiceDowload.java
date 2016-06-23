@@ -89,9 +89,9 @@ public class ServiceDowload extends Service {
                 int count = 0;
                 while (continues) {
                     if (check[3] == false) {
+                        Log.i("Check", check[3] + ":" + count);
                         count++;
                     }
-                    count++;
                     SystemClock.sleep(random.nextInt(500) + 100);
                     EventBus.getDefault().post(new Message(count, 4));
                     if (count == 100) {
