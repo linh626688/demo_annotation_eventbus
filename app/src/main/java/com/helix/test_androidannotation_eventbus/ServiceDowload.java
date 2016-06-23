@@ -7,6 +7,7 @@ import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import org.androidannotations.annotations.EService;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -15,7 +16,7 @@ import java.util.Random;
 /**
  * Created by Giang Hoang on 23/06/2016.
  */
-
+@EService
 public class ServiceDowload extends Service {
     private Random random = new Random();
     private boolean continues = false;
