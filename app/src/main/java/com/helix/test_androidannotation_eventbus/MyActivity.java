@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
+import android.support.annotation.WorkerThread;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -13,6 +14,7 @@ import android.widget.Toast;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.SupposeUiThread;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.DrawableRes;
@@ -40,59 +42,27 @@ public class MyActivity extends Activity {
     private long fileSize = 0;
 
     @Background
-    void thisGETJSON() {
-        progressBar1.setProgress(50);
+    void doInBackGruond() {
         publishProgress(50);
+
 
     }
 
     @UiThread
     void publishProgress(int progress) {
-
-        Toast.makeText(this, "Progressbar Run", Toast.LENGTH_SHORT).show();
+        progressBar1.setMax(100);
+        progressBar1.setProgress(progress);
 
       /*This is the main UI thread here I do cool stuff with the JSON objects*/
     }
+
 
     @Click
     void btn_start() {
         count = 0;
         Toast.makeText(this, "Click Button Start", Toast.LENGTH_SHORT).show();
-        new Thread(new Runnable() {
-            public void run() {
-                while (count < 100) {
 
-                    // process some tasks
-                    count = doSomeTasks();
-
-                    // your computer is too fast, sleep 1 second
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                    // Update the progress bar
-                    progressBarHandler.post(new Runnable() {
-                        public void run() {
-                            progressBar1.setProgress(count);
-                        }
-                    });
-                }
-
-                // ok, file is downloaded,
-                if (count >= 100) {
-
-                    // sleep 2 seconds, so that you can see the 100%
-                    try {
-                        Thread.sleep(2000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-
-                }
-            }
-        }).start();
+        doInBackGruond();
 
     }
 
