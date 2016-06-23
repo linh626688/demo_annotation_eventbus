@@ -51,7 +51,6 @@ public class ServiceDowload extends Service {
     public void onServiceEvent(ServiceEvent serviceEvent) {
         Log.i("Service", "Receive Event");
         prepare();
-
         startDowload1();
         startDowload2();
         startDowload3();
