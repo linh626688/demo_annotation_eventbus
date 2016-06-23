@@ -93,7 +93,7 @@ public class MyActivity extends Activity {
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onMessageMain(Message message) {
         Log.i("Signal", message.percent + " : " + message.follow);
 
