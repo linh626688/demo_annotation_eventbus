@@ -65,7 +65,6 @@ public class ServiceDowload extends Service {
             public void run() {
                 while (continues) {
                     if (check[0] == true && check[1] == true && check[2] == true && check[3] == true) {
-                        Log.i("Service", "Finish");
                         EventBus.getDefault().post(new Message(1, 5));
                         continues = false;
                     }
@@ -88,7 +87,6 @@ public class ServiceDowload extends Service {
                 int count = 0;
                 while (continues) {
                     if (check[3] == false) {
-                        Log.i("Check", check[3] + ":" + count);
                         count++;
                     }
                     SystemClock.sleep(random.nextInt(500) + 100);
