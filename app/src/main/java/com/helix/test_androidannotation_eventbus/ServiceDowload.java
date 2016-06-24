@@ -19,8 +19,8 @@ import java.util.Random;
 @EService
 public class ServiceDowload extends Service {
     private Random random = new Random();
-    private boolean continues = false;
     private boolean[] check = new boolean[4];
+    private boolean continues;
 
 
     @Nullable
@@ -64,9 +64,12 @@ public class ServiceDowload extends Service {
             @Override
             public void run() {
                 while (continues) {
-                    if (check[0] == true && check[1] == true && check[2] == true && check[3] == true) {
+                    int nbThreads = Thread.getAllStackTraces().keySet().size();
+                    Log.i("NumberThread", nbThreads + "");
+                    if (check[0] == false && check[1] == false && check[2] == false && check[3] == false) {
                         EventBus.getDefault().post(new Message(1, 5));
                         continues = false;
+                        Thread.currentThread().interrupt();
                     }
                 }
             }
@@ -76,7 +79,7 @@ public class ServiceDowload extends Service {
     private void prepare() {
         continues = true;
         for (int i = 0; i < check.length; i++) {
-            check[i] = false;
+            check[i] = true;
         }
     }
 
@@ -85,14 +88,15 @@ public class ServiceDowload extends Service {
             @Override
             public void run() {
                 int count = 0;
-                while (continues) {
-                    if (check[3] == false) {
+                while (check[3]) {
+                    if (check[3] == true) {
                         count++;
                     }
                     SystemClock.sleep(random.nextInt(500) + 100);
                     EventBus.getDefault().post(new Message(count, 4));
                     if (count == 100) {
-                        check[3] = true;
+                        check[3] = false;
+                        Thread.currentThread().interrupt();
                     }
 
                 }
@@ -106,14 +110,15 @@ public class ServiceDowload extends Service {
             @Override
             public void run() {
                 int count = 0;
-                while (continues) {
-                    if (check[2] == false) {
+                while (check[2]) {
+                    if (check[2] == true) {
                         count++;
                     }
                     SystemClock.sleep(random.nextInt(500) + 100);
                     EventBus.getDefault().post(new Message(count, 3));
                     if (count == 100) {
-                        check[2] = true;
+                        check[2] = false;
+                        Thread.currentThread().interrupt();
                     }
                 }
             }
@@ -125,15 +130,16 @@ public class ServiceDowload extends Service {
             @Override
             public void run() {
                 int count = 0;
-                while (continues) {
-                    if (check[1] == false) {
+                while (check[1]) {
+                    if (check[1] == true) {
                         count++;
                     }
                     ;
                     SystemClock.sleep(random.nextInt(500) + 100);
                     EventBus.getDefault().post(new Message(count, 2));
                     if (count == 100) {
-                        check[1] = true;
+                        check[1] = false;
+                        Thread.currentThread().interrupt();
                     }
                 }
             }
@@ -145,14 +151,15 @@ public class ServiceDowload extends Service {
             @Override
             public void run() {
                 int count = 0;
-                while (continues) {
-                    if (check[0] == false) {
+                while (check[0]) {
+                    if (check[0] == true) {
                         count++;
                     }
                     SystemClock.sleep(random.nextInt(500) + 100);
                     EventBus.getDefault().post(new Message(count, 1));
                     if (count == 100) {
-                        check[0] = true;
+                        check[0] = false;
+                        Thread.currentThread().interrupt();
                     }
                 }
             }

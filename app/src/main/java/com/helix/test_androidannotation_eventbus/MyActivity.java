@@ -46,7 +46,6 @@ public class MyActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i("OnCreate", "AAAA");
-        EventBus.getDefault().register(this);
         Intent intent = new Intent(MyActivity.this, ServiceDowload_.class);
         startService(intent);
 
@@ -88,6 +87,9 @@ public class MyActivity extends Activity {
     void btn_start() {
         count = 0;
         Toast.makeText(this, "Click Button Start", Toast.LENGTH_SHORT).show();
+        if (EventBus.getDefault().isRegistered(this) == false) {
+            EventBus.getDefault().register(this);
+        } else return;
         EventBus.getDefault().post(new ServiceEvent());
 
 
